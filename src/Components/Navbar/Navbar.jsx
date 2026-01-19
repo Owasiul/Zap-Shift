@@ -11,7 +11,7 @@ const Navbar = () => {
     LogOut().then((error) => console.log(error));
   };
   console.log(user);
-  
+
   const navItems = (
     <div className="flex lg:flex-row flex-col gap-3">
       <li className="text-lg font-medium hover:text-green-400">
@@ -37,7 +37,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="navbar bg-base-100 shadow-sm px-5">
+      <nav className="navbar bg-base-100 shadow-sm px-5 md:space-x-0 space-x-12">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -69,7 +69,7 @@ const Navbar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{navItems}</ul>
         </div>
-        <div className="navbar-end">
+        <div className="navbar-end flex md:flex-row flex-col-reverse  md:gap-5">
           {user ? (
             <details className="dropdown dropdown-end">
               <summary className="m-1 btn border-0 avatar bg-lime-500">
@@ -85,7 +85,7 @@ const Navbar = () => {
                       <CircleUserRound size={32} className="text-white" />
                     )}
                   </div>
-                  <h1 className="text-lg font-semibold text-white">
+                  <h1 className="md:text-lg text-sm font-semibold text-white">
                     {user?.displayName || "User"}
                   </h1>
                 </div>
@@ -116,11 +116,13 @@ const Navbar = () => {
               >
                 Sign In
               </NavLink>
-              <NavLink className="btn bg-lime-400 text-neutral-700 font-bold">
-                Be a rider
-              </NavLink>
             </div>
           )}
+          <div className="">
+            <NavLink to="/rider" className="btn btn-wide bg-lime-400 text-neutral-700 font-bold">
+              Be a rider
+            </NavLink>
+          </div>
         </div>
       </nav>
     </div>

@@ -8,10 +8,10 @@ const Login = () => {
   const { signInwithEmail_Password, googleSignIn } = useAuth();
   const navigate = useNavigate();
   // sign in with email and password
-  const handleSignIn = (data) => {
+  const handleSignIn = async (data) => {
     console.log(data);
     try {
-      const result = signInwithEmail_Password(data.email, data.password);
+      const result = await signInwithEmail_Password(data.email, data.password);
       updateUserData({
         displayName: data.name,
         email: data.email,
@@ -33,6 +33,7 @@ const Login = () => {
       });
       const result = await googleSignIn();
       console.log(result);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +45,7 @@ const Login = () => {
         <h3 className="text-lg font-semibold">Login with ZapShift</h3>
       </div>
       <div className="body my-5">
-        <form onClick={handleSubmit(handleSignIn)} className="space-y-4">
+        <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4">
           <div>
             <label
               htmlFor="email"
@@ -78,10 +79,13 @@ const Login = () => {
             />
           </div>
 
-          <a className="font-black underline cursor-pointer">
+          <NavLink
+            to="/auth/resetpassword"
+            className="font-black underline cursor-pointer"
+          >
             {" "}
             Forget Password?
-          </a>
+          </NavLink>
 
           {/* login Button */}
           <button

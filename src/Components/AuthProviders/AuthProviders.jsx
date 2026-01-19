@@ -8,6 +8,7 @@ import {
   onAuthStateChanged,
   signOut,
   updateProfile,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "../../firebase.config";
 
@@ -35,15 +36,21 @@ const AuthProviders = ({ children }) => {
   };
 
   // sign out
-  const LogOut = () =>{
-    setLoading(true)
-    return signOut(auth)
-  }
+  const LogOut = () => {
+    setLoading(true);
+    return signOut(auth);
+  };
 
   // update user data
-  const updateUserData = (updateUser) =>{
-    updateProfile(auth.currentUser, updateUser)
-  }
+  const updateUserData = (updateUser) => {
+    updateProfile(auth.currentUser, updateUser);
+  };
+
+  // Reset Password
+  const sendResetPasswordMail = (email) => {
+    setLoading(true)
+   return sendPasswordResetEmail(auth, email);
+  };
 
   // Track authentication state
   useEffect(() => {
@@ -63,13 +70,12 @@ const AuthProviders = ({ children }) => {
     setUser,
     googleSignIn,
     LogOut,
-    updateUserData
+    updateUserData,
+    sendResetPasswordMail
   };
 
   return (
-    <AuthContext.Provider value={AuthInfo}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={AuthInfo}>{children}</AuthContext.Provider>
   );
 };
 

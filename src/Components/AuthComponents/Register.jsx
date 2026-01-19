@@ -29,7 +29,7 @@ const Register = () => {
   const handleRegistration = async (data) => {
     console.log(data);
     const updateImage = data.photo[0];
-    
+
     if (!updateImage) {
       console.error("No image selected");
       return;
@@ -39,7 +39,7 @@ const Register = () => {
       // First register the user
       const result = await registerWithEmail_Password(
         data.email,
-        data.password
+        data.password,
       );
 
       // Create FormData and upload image to imgbb
@@ -49,10 +49,10 @@ const Register = () => {
       const image_API_URL = `https://api.imgbb.com/1/upload?key=${
         import.meta.env.VITE_imgbbApi
       }`;
-      
+
       const imgbbResponse = await axios.post(image_API_URL, formData);
       console.log("Image uploaded successfully:", imgbbResponse.data);
-      
+
       const uploadedImageUrl = imgbbResponse.data.data.url;
 
       // Update user profile with name and uploaded image URL
@@ -62,7 +62,7 @@ const Register = () => {
       });
 
       console.log("User registered with photo:", result.user);
-      
+
       // Navigate to home - the navbar should now show the user's photo
       navigate("/");
     } catch (error) {
@@ -177,12 +177,20 @@ const Register = () => {
             name="password"
             {...register("password", {
               required: true,
+              pattern:
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
             })}
             placeholder="Password"
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent"
           />
           {errors.password?.type === "required" && (
             <p className="text-red-700 mt-3">Password is required</p>
+          )}
+          {errors.password?.type === "pattern" && (
+            <p className="text-red-700 mt-3">
+              Minimum eight characters, at least one uppercase letter, one
+              lowercase letter, one number and one special character needed
+            </p>
           )}
         </div>
 

@@ -6,6 +6,9 @@ import About_Us from "../Page/About_Us/About_Us";
 import AuthLayout from "../Layout/Auth/AuthLayout";
 import Login from "../Components/AuthComponents/Login";
 import Register from "../Components/AuthComponents/Register";
+import ResetPassword from "../Components/AuthComponents/ResetPassword";
+import PrivateRoutes from "../Components/AuthProviders/PrivateRoutes";
+import Rider from "../Page/Rider/Rider";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +43,19 @@ const router = createBrowserRouter([
         path: "/auth/register",
         Component: Register,
       },
+      {
+        path: "/auth/resetpassword",
+        Component: ResetPassword,
+      },
     ],
+  },
+  {
+    path: "/rider",
+    element: (
+      <PrivateRoutes>
+        <Rider></Rider>
+      </PrivateRoutes>
+    ),
   },
 ]);
 export default router;
