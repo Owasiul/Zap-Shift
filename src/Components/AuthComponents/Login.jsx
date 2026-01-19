@@ -1,24 +1,30 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
 import { useForm } from "react-hook-form";
 
 const Login = () => {
   const { register, handleSubmit, updateUserData, user } = useForm();
   const { signInwithEmail_Password, googleSignIn } = useAuth();
+  const location = useLocation();
+  console.log(location);
   const navigate = useNavigate();
   // sign in with email and password
   const handleSignIn = async (data) => {
     console.log(data);
     try {
-      const result = await signInwithEmail_Password(data.email, data.password);
+      const result = await signInwithEmail_Password(
+        data.email,
+        data.password,
+      ).then(() => {
+        navigate(location?.state || "/");
+      });
+      console.log(result);
       updateUserData({
         displayName: data.name,
         email: data.email,
         photoURL: user.photoURL,
       });
-      console.log(result);
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -26,14 +32,15 @@ const Login = () => {
   // google sign in
   const handleGoogleSignIn = async () => {
     try {
+      const result = await googleSignIn().then(() => {
+        navigate(location?.state || "/");
+      });
+      console.log(result);
       updateUserData({
         displayName: user.name,
         email: user.email,
         photoURL: user.photoURL,
       });
-      const result = await googleSignIn();
-      console.log(result);
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -99,6 +106,7 @@ const Login = () => {
         <p className="text-center text-sm text-gray-600 mt-4">
           Don't have any account?{" "}
           <NavLink
+            state={location.state}
             to="/auth/register"
             className="text-lime-600 hover:text-lime-700 font-medium"
           >

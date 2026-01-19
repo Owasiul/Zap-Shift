@@ -12,20 +12,20 @@ const AuthLayout = () => {
         </div>
 
         {/* Main content area with two columns */}
-        <div className="flex flex-row flex-1">
+        <div className="flex flex-col lg:flex-row flex-1 lg:mt-0 mt-20">
           {/* Left side - Form area */}
-          <div className="w-1/2 flex items-center justify-center px-10">
+          <div className="w-full lg:w-1/2 flex items-center px-6 sm:px-10 py-8 lg:py-0">
             <div className="w-full max-w-md">
               <Outlet />
             </div>
           </div>
 
           {/* Right side - Image area */}
-          <div className="w-1/2 bg-[#fafdf0] flex items-center justify-center">
+          <div className="w-full lg:w-1/2 hidden bg-[#fafdf0] lg:flex items-center justify-center py-8">
             <img
               src={sideImg}
               alt="Authentication illustration"
-              className="max-w-lg"
+              className="max-w-xs sm:max-w-sm lg:max-w-lg"
             />
           </div>
         </div>

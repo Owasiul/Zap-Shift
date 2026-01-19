@@ -15,29 +15,29 @@ const Navbar = () => {
   const navItems = (
     <div className="flex lg:flex-row flex-col gap-3">
       <li className="text-lg font-medium hover:text-green-400">
-        <NavLink to="/services">Services</NavLink>
+        <NavLink to="/aboutus">About Us</NavLink>
       </li>
       <li className="text-lg font-medium hover:text-green-400">
         <NavLink to="/coverage">Coverage</NavLink>
       </li>
       <li className="text-lg font-medium hover:text-green-400">
-        <NavLink to="/aboutus">About Us</NavLink>
-      </li>
-      <li className="text-lg font-medium hover:text-green-400">
         <NavLink to="/pricing">Pricing</NavLink>
       </li>
       <li className="text-lg font-medium hover:text-green-400">
-        <NavLink to="/blog">Blog</NavLink>
+        <NavLink to="/track-order">Track Order</NavLink>
       </li>
       <li className="text-lg font-medium hover:text-green-400">
-        <NavLink to="/contact">Contact</NavLink>
+        <NavLink to="/send-parcel">Send Parcel</NavLink>
+      </li>
+      <li className="text-lg font-medium hover:text-green-400">
+        <NavLink to="/rider">Be a Rider</NavLink>
       </li>
     </div>
   );
 
   return (
     <div>
-      <nav className="navbar bg-base-100 shadow-sm px-5 md:space-x-0 space-x-12">
+      <nav className="navbar bg-base-100 shadow-sm px-5 md:space-x-0 space-x-14">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -69,7 +69,7 @@ const Navbar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{navItems}</ul>
         </div>
-        <div className="navbar-end flex md:flex-row flex-col-reverse  md:gap-5">
+        <div className="navbar-end flex md:flex-row flex-col  md:gap-5 md:space-y-0 space-y-3">
           {user ? (
             <details className="dropdown dropdown-end">
               <summary className="m-1 btn border-0 avatar bg-lime-500">
@@ -119,7 +119,10 @@ const Navbar = () => {
             </div>
           )}
           <div className="">
-            <NavLink to="/rider" className="btn btn-wide bg-lime-400 text-neutral-700 font-bold">
+            <NavLink
+              to="/rider"
+              className="btn btn-wide bg-lime-400 text-neutral-700 font-bold"
+            >
               Be a rider
             </NavLink>
           </div>

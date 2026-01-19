@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CircleUserRound } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
 import axios from "axios";
 
@@ -10,6 +10,7 @@ const Register = () => {
     useAuth();
   const navigate = useNavigate();
   const [previewImage, setPreviewImage] = useState(null);
+  const location = useLocation();
 
   const {
     register,
@@ -64,7 +65,7 @@ const Register = () => {
       console.log("User registered with photo:", result.user);
 
       // Navigate to home - the navbar should now show the user's photo
-      navigate("/");
+      navigate(location.state);
     } catch (error) {
       console.error("Registration error:", error.message);
     }
@@ -79,7 +80,7 @@ const Register = () => {
         photoURL: user.photoURL,
       });
       console.log(result);
-      navigate("/");
+      navigate(location.state);
     } catch (error) {
       console.log(error);
     }

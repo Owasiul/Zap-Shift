@@ -9,6 +9,7 @@ import Register from "../Components/AuthComponents/Register";
 import ResetPassword from "../Components/AuthComponents/ResetPassword";
 import PrivateRoutes from "../Components/AuthProviders/PrivateRoutes";
 import Rider from "../Page/Rider/Rider";
+import SendParcel from "../Page/SendParcel/SendParcel";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoutes>
         <Rider></Rider>
+      </PrivateRoutes>
+    ),
+  },
+  {
+    path: "/send-parcel",
+    element: (
+      <PrivateRoutes>
+        <SendParcel></SendParcel>
       </PrivateRoutes>
     ),
   },
