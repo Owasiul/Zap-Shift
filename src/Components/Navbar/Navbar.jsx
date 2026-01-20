@@ -10,7 +10,7 @@ const Navbar = () => {
   const handleLogOut = () => {
     LogOut().then((error) => console.log(error));
   };
-  console.log(user);
+  // console.log(user);
 
   const navItems = (
     <div className="flex lg:flex-row flex-col gap-3">
