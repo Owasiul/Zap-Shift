@@ -60,6 +60,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/send-parcel",
+    loader: () => fetch("/warehouses.json").then((res) => res.json()),
     element: (
       <PrivateRoutes>
         <SendParcel></SendParcel>

@@ -1,26 +1,84 @@
 import React from "react";
-import Navbar from "../../Components/Navbar/Navbar";
-import Footer from "../../Components/Footer/Footer";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 const SendParcel = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  // Mock data for demonstration
+  const wireHouse = useLoaderData();
 
-  //   handle send Parcel
+  const wireHouseDuplicate = wireHouse.map((dis) => dis.region);
+  const regions = [...new Set(wireHouseDuplicate)];
+
+  const { register, handleSubmit, control } = useForm();
+  const senderRegions = useWatch({ control, name: "sender-region" });
+  const receiverRegions = useWatch({ control, name: "receiver-region" });
+
+  const districtByRegion = (region) => {
+    if (!region) return [];
+    const regionDistrict = wireHouse.filter(
+      (center) => center.region === region,
+    );
+    const district = regionDistrict.map((dis) => dis.district);
+    return district;
+  };
+
   const handle_Send_Parcel = (data) => {
     console.log(data);
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+    const parcelWeight = parseFloat(data.parcelWeight);
+    let cost = 0;
+
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight <= 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcelWeight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+
+        cost = minCharge + extraCharge;
+      }
+    }
+
+    console.log("cost is", cost);
+
+    Swal.fire({
+      title: "Aggree with the cost?",
+      text: `You will be charged! ${cost} taka`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        
+        // Swal.fire({
+        //   title: "Deleted!",
+        //   text: "I Aggree.",
+        //   icon: "success",
+        // });
+      }
+    });
   };
+
+  // // Debug logging
+  // console.log("Sender Region:", senderRegions);
+  // console.log("Districts:", districtByRegion(senderRegions));
+
   return (
-    <div>
-      <Navbar></Navbar>
+    <div className="min-h-screen bg-gray-50">
       <main className="w-[90%] mx-auto md:py-10 py-5">
         <div className="head">
-          <h1 className="text-secondary text-5xl font-bold">Send A Parcel</h1>
-          <h3 className="mt-12 border-b border-gray-300  pb-10 text-secondary text-2xl font-semibold">
+          <h1 className="text-gray-800 text-5xl font-bold">Send A Parcel</h1>
+          <h3 className="mt-12 border-b border-gray-300 pb-10 text-gray-700 text-2xl font-semibold">
             Enter your parcel details
           </h3>
         </div>
@@ -82,7 +140,7 @@ const SendParcel = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-gray-300 pt-10">
                 {/* Sender Details */}
                 <div>
-                  <h3 className="text-lg font-semibold text-secondary mb-4">
+                  <h3 className="text-lg font-semibold text-gray-700 mb-4">
                     Sender Details
                   </h3>
 
@@ -142,21 +200,40 @@ const SendParcel = () => {
                   <div className="form-control mb-4">
                     <label className="label">
                       <span className="label-text font-medium">
+                        Your Region
+                      </span>
+                    </label>
+                    <select
+                      {...register("sender-region")}
+                      className="select select-bordered w-full"
+                    >
+                      <option value="">Pick Your Region</option>
+                      {regions.map((dis, index) => (
+                        <option key={index} value={dis}>
+                          {dis}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-control mb-4">
+                    <label className="label">
+                      <span className="label-text font-medium">
                         Your District
                       </span>
                     </label>
                     <select
-                      {...register("sender-district")}
+                      {...register("senderDistrict")}
                       className="select select-bordered w-full"
+                      disabled={!senderRegions}
                     >
-                      <option value="dhaka">Dhaka</option>
-                      <option value="chittagong">Chittagong</option>
-                      <option value="rajshahi">Rajshahi</option>
-                      <option value="khulna">Khulna</option>
-                      <option value="sylhet">Sylhet</option>
-                      <option value="barisal">Barisal</option>
-                      <option value="rangpur">Rangpur</option>
-                      <option value="mymensingh">Mymensingh</option>
+                      <option value="">Pick Your District</option>
+                      {senderRegions &&
+                        districtByRegion(senderRegions).map((r, i) => (
+                          <option key={i} value={r}>
+                            {r}
+                          </option>
+                        ))}
                     </select>
                   </div>
 
@@ -176,7 +253,7 @@ const SendParcel = () => {
 
                 {/* Receiver Details */}
                 <div>
-                  <h3 className="text-lg font-semibold text-secondary mb-4">
+                  <h3 className="text-lg font-semibold text-gray-700 mb-4">
                     Receiver Details
                   </h3>
 
@@ -188,7 +265,7 @@ const SendParcel = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="Sender Name"
+                      placeholder="Receiver Name"
                       {...register("receiver-name")}
                       className="input input-bordered w-full"
                     />
@@ -202,7 +279,7 @@ const SendParcel = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="Sender Email"
+                      placeholder="Receiver Email"
                       {...register("receiver-email")}
                       className="input input-bordered w-full"
                     />
@@ -230,10 +307,29 @@ const SendParcel = () => {
                     </label>
                     <input
                       type="number"
-                      placeholder="Sender Contact No starts with +88"
+                      placeholder="Receiver Contact No starts with +88"
                       {...register("receiver-number")}
                       className="input input-bordered w-full"
                     />
+                  </div>
+
+                  <div className="form-control mb-4">
+                    <label className="label">
+                      <span className="label-text font-medium">
+                        Receiver Region
+                      </span>
+                    </label>
+                    <select
+                      {...register("receiver-region")}
+                      className="select select-bordered w-full"
+                    >
+                      <option value="">Pick Receiver Region</option>
+                      {regions.map((dis, index) => (
+                        <option key={index} value={dis}>
+                          {dis}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="form-control mb-4">
@@ -243,17 +339,17 @@ const SendParcel = () => {
                       </span>
                     </label>
                     <select
-                      {...register("receiver-district")}
+                      {...register("receiverDistrict")}
                       className="select select-bordered w-full"
+                      disabled={!receiverRegions}
                     >
-                      <option value="dhaka">Dhaka</option>
-                      <option value="chittagong">Chittagong</option>
-                      <option value="rajshahi">Rajshahi</option>
-                      <option value="khulna">Khulna</option>
-                      <option value="sylhet">Sylhet</option>
-                      <option value="barisal">Barisal</option>
-                      <option value="rangpur">Rangpur</option>
-                      <option value="mymensingh">Mymensingh</option>
+                      <option value="">Pick Receiver District</option>
+                      {receiverRegions &&
+                        districtByRegion(receiverRegions).map((r, i) => (
+                          <option key={i} value={r}>
+                            {r}
+                          </option>
+                        ))}
                     </select>
                   </div>
 
@@ -292,7 +388,6 @@ const SendParcel = () => {
           </div>
         </form>
       </main>
-      <Footer></Footer>
     </div>
   );
 };
