@@ -32,6 +32,12 @@ const Navbar = () => {
       <li className="text-lg font-medium hover:text-green-400">
         <NavLink to="/rider">Be a Rider</NavLink>
       </li>
+
+      {user && (
+        <li className="text-lg font-medium hover:text-green-400">
+          <NavLink to="/dashboard/my-parcel">My Parcels</NavLink>
+        </li>
+      )}
     </div>
   );
 

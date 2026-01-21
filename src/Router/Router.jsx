@@ -10,6 +10,8 @@ import ResetPassword from "../Components/AuthComponents/ResetPassword";
 import PrivateRoutes from "../Components/AuthProviders/PrivateRoutes";
 import Rider from "../Page/Rider/Rider";
 import SendParcel from "../Page/SendParcel/SendParcel";
+import DashBoard from "../Page/DashBoard/DashBoard";
+import UserParcel from "../Page/DashBoard/UserParcel/UserParcel";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +68,20 @@ const router = createBrowserRouter([
         <SendParcel></SendParcel>
       </PrivateRoutes>
     ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoutes>
+        <DashBoard></DashBoard>
+      </PrivateRoutes>
+    ),
+    children: [
+      {
+        path: "/dashboard/my-parcel",
+        Component: UserParcel,
+      },
+    ],
   },
 ]);
 export default router;

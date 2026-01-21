@@ -2,18 +2,18 @@ import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
-
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import useAuth from "../../Hooks/useAuth";
 const SendParcel = () => {
   // Mock data for demonstration
   const wireHouse = useLoaderData();
-
   const wireHouseDuplicate = wireHouse.map((dis) => dis.region);
   const regions = [...new Set(wireHouseDuplicate)];
-
+  const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, control } = useForm();
   const senderRegions = useWatch({ control, name: "sender-region" });
   const receiverRegions = useWatch({ control, name: "receiver-region" });
-
+  const { user } = useAuth();
   const districtByRegion = (region) => {
     if (!region) return [];
     const regionDistrict = wireHouse.filter(
@@ -58,8 +58,11 @@ const SendParcel = () => {
       confirmButtonText: "Yes!",
     }).then((result) => {
       if (result.isConfirmed) {
+        // save the parcel info to the db
+        axiosSecure
+          .post("/parcels", data)
+          .then((res) => console.log("after saving the parcel", res.data));
 
-        
         // Swal.fire({
         //   title: "Deleted!",
         //   text: "I Aggree.",
@@ -153,6 +156,8 @@ const SendParcel = () => {
                     <input
                       type="text"
                       {...register("sender-name")}
+                      readOnly={true}
+                      defaultValue={user?.displayName}
                       placeholder="Sender Name"
                       className="input input-bordered w-full"
                     />
@@ -167,6 +172,8 @@ const SendParcel = () => {
                       type="text"
                       {...register("sender-email")}
                       placeholder="Sender Email"
+                      readOnly={true}
+                      defaultValue={user?.email}
                       className="input input-bordered w-full"
                     />
                   </div>
