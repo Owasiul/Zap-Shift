@@ -66,7 +66,7 @@ const DashBoard = () => {
 
             <li>
               <NavLink
-                to="dashboard/my-parcel"
+                to="/dashboard/my-parcel"
                 className="flex items-center gap-3"
               >
                 <Van size={20} />
