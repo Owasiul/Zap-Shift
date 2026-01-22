@@ -12,6 +12,7 @@ import Rider from "../Page/Rider/Rider";
 import SendParcel from "../Page/SendParcel/SendParcel";
 import DashBoard from "../Page/DashBoard/DashBoard";
 import UserParcel from "../Page/DashBoard/UserParcel/UserParcel";
+import Payment from "../Page/DashBoard/Payment/Payment";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/my-parcel",
         Component: UserParcel,
+      },
+      {
+        path: "/dashboard/payment/:parcelId",
+        Component: Payment,
       },
     ],
   },
