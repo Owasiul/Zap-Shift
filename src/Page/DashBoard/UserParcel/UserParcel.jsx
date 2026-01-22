@@ -96,8 +96,8 @@ const UserParcel = () => {
                   <td className="px-6 py-4">{parcel.parcelWeight}</td>
                   <td className="px-6 py-4">{parcel.cost}</td>
                   <td className="px-6 py-4">
-                    {parcel.paymentStatus === "paid" ? (
-                      <span className="text-primary">Paid</span>
+                    {parcel.payment_status === "paid" ? (
+                      <span className="text-emerald-400 font-bold text-lg">Paid</span>
                     ) : (
                       <Link to={`/dashboard/payment/${parcel._id}`}>
                         <button className="btn btn-sm bg-red-500 text-white">

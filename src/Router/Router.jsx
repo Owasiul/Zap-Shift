@@ -13,6 +13,8 @@ import SendParcel from "../Page/SendParcel/SendParcel";
 import DashBoard from "../Page/DashBoard/DashBoard";
 import UserParcel from "../Page/DashBoard/UserParcel/UserParcel";
 import Payment from "../Page/DashBoard/Payment/Payment";
+import PaymentSuccess from "../Page/DashBoard/Payment/PaymentSuccess/PaymentSuccess";
+import PaymentCanceled from "../Page/DashBoard/Payment/PaymentCanceled/PaymentCanceled";
 
 const router = createBrowserRouter([
   {
@@ -85,6 +87,14 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/payment/:parcelId",
         Component: Payment,
+      },
+      {
+        path: "/dashboard/payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "/dashboard/payment-cancelled",
+        Component: PaymentCanceled,
       },
     ],
   },
