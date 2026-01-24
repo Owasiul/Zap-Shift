@@ -71,9 +71,6 @@ const UserParcel = () => {
                   Payment Status
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
-                  Delivery Status
-                </th>
-                <th scope="col" className="px-6 py-3 font-medium">
                   Action
                 </th>
               </tr>
@@ -106,7 +103,6 @@ const UserParcel = () => {
                       </Link>
                     )}
                   </td>
-                  <td className="px-6 py-4">{parcel.deleveryStatus}</td>
                   <td className="px-6 py-4 flex flex-row gap-3">
                     <button className="btn btn-square hover:bg-primary">
                       <EditIcon />

@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import useAuth from "../../Hooks/useAuth";
@@ -14,6 +14,7 @@ const SendParcel = () => {
   const senderRegions = useWatch({ control, name: "sender-region" });
   const receiverRegions = useWatch({ control, name: "receiver-region" });
   const { user } = useAuth();
+  const navigate = useNavigate();
   const districtByRegion = (region) => {
     if (!region) return [];
     const regionDistrict = wireHouse.filter(
@@ -31,12 +32,12 @@ const SendParcel = () => {
     let cost = 0;
 
     if (isDocument) {
-      cost = isSameDistrict ? 60 : 80;
+      cost = isSameDistrict ? 80 : 110;
     } else {
       if (parcelWeight <= 3) {
-        cost = isSameDistrict ? 110 : 150;
+        cost = isSameDistrict ? 130 : 150;
       } else {
-        const minCharge = isSameDistrict ? 110 : 150;
+        const minCharge = isSameDistrict ? 130 : 150;
         const extraWeight = parcelWeight - 3;
         const extraCharge = isSameDistrict
           ? extraWeight * 40
@@ -56,19 +57,23 @@ const SendParcel = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!",
+      confirmButtonText: "Confirm, continue payment!",
     }).then((result) => {
       if (result.isConfirmed) {
         // save the parcel info to the db
-        axiosSecure
-          .post("/parcels", data)
-          .then((res) => console.log("after saving the parcel", res.data));
-
-        // Swal.fire({
-        //   title: "Deleted!",
-        //   text: "I Aggree.",
-        //   icon: "success",
-        // });
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log("after saving the parcel", res.data);
+          if (res.data.insertedId) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Parcel has created. please pay",
+              showConfirmButton: false,
+              timer: 2500,
+            });
+            navigate("/dashboard/my-parcel");
+          }
+        });
       }
     });
   };
