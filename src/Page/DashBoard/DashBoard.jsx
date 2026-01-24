@@ -1,4 +1,4 @@
-import { BoxIcon, Van } from "lucide-react";
+import { BoxIcon, History, Van } from "lucide-react";
 import { Link, NavLink, Outlet } from "react-router";
 
 const DashBoard = () => {
@@ -71,6 +71,15 @@ const DashBoard = () => {
               >
                 <Van size={20} />
                 <span>My Parcels</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/payment-history"
+                className="flex items-center gap-3"
+              >
+                <History size={20} />
+                <span>My Payment History</span>
               </NavLink>
             </li>
 
