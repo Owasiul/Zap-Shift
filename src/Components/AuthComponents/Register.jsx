@@ -4,13 +4,16 @@ import { useForm } from "react-hook-form";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
 import axios from "axios";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const Register = () => {
-  const { registerWithEmail_Password, googleSignIn, user, updateUserData } =
+  const { registerWithEmail_Password, googleSignIn, updateUserData } =
     useAuth();
   const navigate = useNavigate();
   const [previewImage, setPreviewImage] = useState(null);
   const location = useLocation();
+  const axiosSecure = useAxiosSecure();
 
   const {
     register,
@@ -43,6 +46,8 @@ const Register = () => {
         data.password,
       );
 
+      console.log("User registered:", result.user);
+
       // Create FormData and upload image to imgbb
       const formData = new FormData();
       formData.append("image", updateImage);
@@ -51,36 +56,63 @@ const Register = () => {
         import.meta.env.VITE_imgbbApi
       }`;
 
+      // ✅ Await the imgbb upload
       const imgbbResponse = await axios.post(image_API_URL, formData);
       console.log("Image uploaded successfully:", imgbbResponse.data);
 
       const uploadedImageUrl = imgbbResponse.data.data.url;
 
-      // Update user profile with name and uploaded image URL
+      // ✅ Update user data into db
+      const userInfo = {
+        email: data.email,
+        displayName: data.name,
+        photoURL: uploadedImageUrl,
+      };
+
+      const dbResponse = await axiosSecure.post("/users", userInfo);
+      if (dbResponse.data.insertedId) {
+        console.log("User created in db", dbResponse.data.insertedId);
+      }
+
+      // ✅ Update Firebase user profile with name and uploaded image URL
       await updateUserData({
         displayName: data.name,
-        photoURL: uploadedImageUrl, // This URL will be available in the navbar
+        photoURL: uploadedImageUrl,
       });
 
-      console.log("User registered with photo:", result.user);
+      console.log("User profile updated successfully");
 
-      // Navigate to home - the navbar should now show the user's photo
-      navigate(location.state);
+      // ✅ Navigate to the desired location
+      navigate(location?.state || "/");
     } catch (error) {
-      console.error("Registration error:", error.message);
+      console.error("Registration error:", error);
+      // Optional: Show error message to user
+      Swal.error(error.message || "Registration failed. Please try again.");
     }
   };
 
   const handleGoogleSignIn = async () => {
     try {
       const result = await googleSignIn();
-      updateUserData({
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
+      const signedInUser = result.user;
+      // console.log(signedInUser);
+      // Data object for your database
+      const userInfo = {
+        displayName: signedInUser.displayName,
+        email: signedInUser.email,
+        photoURL: signedInUser.photoURL,
+      };
+      // user update via firebase
+      await updateUserData({
+        displayName: signedInUser.displayName,
+        email: signedInUser.email,
+        photoURL: signedInUser.photoURL,
       });
-      console.log(result);
-      navigate(location.state);
+      // update the data in db
+      axiosSecure.post("/users", userInfo);
+
+      // console.log(result);
+      navigate(location?.state || "/");
     } catch (error) {
       console.log(error);
     }

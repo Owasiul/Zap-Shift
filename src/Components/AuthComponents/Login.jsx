@@ -2,12 +2,14 @@ import React from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../Hooks/useAuth";
 import { useForm } from "react-hook-form";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Login = () => {
   const { register, handleSubmit, updateUserData, user } = useForm();
   const { signInwithEmail_Password, googleSignIn } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
   const navigate = useNavigate();
   // sign in with email and password
   const handleSignIn = async (data) => {
@@ -32,15 +34,27 @@ const Login = () => {
   // google sign in
   const handleGoogleSignIn = async () => {
     try {
-      const result = await googleSignIn().then(() => {
+      const result = await googleSignIn();
+      const signedInUser = result.user;
+
+      // Data object for your database
+      const userInfo = {
+        displayName: signedInUser.displayName,
+        email: signedInUser.email,
+        photoURL: signedInUser.photoURL,
+      };
+      // user update via firebase
+      await updateUserData({
+        displayName: signedInUser.displayName,
+        email: signedInUser.email,
+        photoURL: signedInUser.photoURL,
+      });
+      // update the data in db
+      axiosSecure.post("/users", userInfo).then(() => {
         navigate(location?.state || "/");
       });
+
       console.log(result);
-      updateUserData({
-        displayName: user.name,
-        email: user.email,
-        photoURL: user.photoURL,
-      });
     } catch (error) {
       console.log(error);
     }
