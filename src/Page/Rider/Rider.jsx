@@ -12,7 +12,7 @@ const Rider = () => {
   const wireHouse = useLoaderData();
   const wireHouseDuplicate = wireHouse.map((dis) => dis.region);
   const regions = [...new Set(wireHouseDuplicate)];
-  const riderRegions = useWatch({ control, name: "sender-region" });
+  const riderRegions = useWatch({ control, name: "rider-region" });
   const axiosSecure = useAxiosSecure();
 
   const districtByRegion = (region) => {
@@ -93,7 +93,7 @@ const Rider = () => {
                     </span>
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     name="license"
                     {...register("drivingLicence")}
                     placeholder="Driving License Number"
@@ -123,7 +123,7 @@ const Rider = () => {
                     <span className="label-text font-medium">Your Region</span>
                   </label>
                   <select
-                    {...register("sender-region")}
+                    {...register("rider-region")}
                     className="select select-bordered w-full"
                   >
                     <option value="">Pick Your Region</option>
@@ -142,7 +142,7 @@ const Rider = () => {
                     </span>
                   </label>
                   <select
-                    {...register("senderDistrict")}
+                    {...register("riderDistrict")}
                     className="select select-bordered w-full"
                     disabled={!riderRegions}
                   >
@@ -163,7 +163,7 @@ const Rider = () => {
                     </span>
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     name="nid"
                     {...register("nid")}
                     placeholder="NID"
