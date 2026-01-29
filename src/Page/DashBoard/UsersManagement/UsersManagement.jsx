@@ -1,47 +1,73 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Shield, ShieldOff } from "lucide-react";
 import Swal from "sweetalert2";
 
 const UsersManagement = () => {
+  const [searchText, setSearchText] = useState();
+
   const axiosSecure = useAxiosSecure();
   const { refetch, data: users = [] } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", searchText],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users`);
+      const res = await axiosSecure.get(`/users?searchText=${searchText}`);
       return res.data;
     },
   });
 
   const handleMakeAdmin = (user) => {
     const roleInfo = { role: "admin" };
-    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+    axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
       console.log(res.data);
       if (res.data.modifiedCount) {
-        refetch();
         Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${user.displayName} has been marked as an admin`,
-          showConfirmButton: false,
-          timer: 2000,
+          title: `Are you sure this ${user.displayName} will be your admin?`,
+          text: "You won't be able to revert this now!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Confirm!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: `${user.displayName} is now an admin`,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          }
+          refetch();
         });
       }
     });
   };
   const handleRemoveAdmin = (user) => {
     const roleInfo = { role: "user" };
-    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+    axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
       console.log(res.data);
       if (res.data.modifiedCount) {
-        refetch();
         Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${user.displayName} has been marked as an admin`,
-          showConfirmButton: false,
-          timer: 2000,
+          title: `Are you sure that you are removing ${user.displayName} as an admin ?`,
+          text: "You won't be able to revert this now!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Confirm!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: `${user.displayName} is not an admin now`,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          }
+          refetch();
         });
       }
     });
@@ -49,11 +75,37 @@ const UsersManagement = () => {
 
   return (
     <div>
-      <div className="min-h-screen bg-gray-100 p-8">
+      <div className="min-h-screen">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="px-6 py-4 bg-linear-to-r from-blue-500 to-blue-600">
+            <div className="px-6 py-4 bg-linear-to-r from-blue-500 to-blue-600 flex flex-row justify-between items-center">
               <h1 className="text-2xl font-bold text-white">User Management</h1>
+
+              <div className="search">
+                <label className="input">
+                  <svg
+                    className="h-[1em] opacity-50"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                  >
+                    <g
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                      strokeWidth="2.5"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <path d="m21 21-4.3-4.3"></path>
+                    </g>
+                  </svg>
+                  <input
+                    type="search"
+                    onChange={(event) => setSearchText(event.target.value)}
+                    placeholder="Search user by their name"
+                  />
+                </label>
+              </div>
             </div>
 
             <div className="overflow-x-auto">

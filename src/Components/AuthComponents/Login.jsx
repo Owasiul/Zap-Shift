@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Login = () => {
-  const { register, handleSubmit, updateUserData, user } = useForm();
-  const { signInwithEmail_Password, googleSignIn } = useAuth();
+  const { register, handleSubmit, user } = useForm();
+  const { signInwithEmail_Password, googleSignIn, updateUserData } = useAuth();
   const axiosSecure = useAxiosSecure();
   const location = useLocation();
   // console.log(location);

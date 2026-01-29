@@ -7,8 +7,10 @@ import {
   Van,
 } from "lucide-react";
 import { Link, NavLink, Outlet } from "react-router";
+import useRole from "../../Hooks/useRole";
 
 const DashBoard = () => {
+  const { role } = useRole();
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -89,25 +91,28 @@ const DashBoard = () => {
                 <span>My Payment History</span>
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/dashboard/approve-riders"
-                className="flex items-center gap-3"
-              >
-                <Motorbike size={20}></Motorbike>
-                <span>Apporve Riders</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/users-management"
-                className="flex items-center gap-3"
-              >
-                <User size={20} />
-                <span>Users Management</span>
-              </NavLink>
-            </li>
-
+            {role === "admin" && (
+              <>
+                <li>
+                  <NavLink
+                    to="/dashboard/approve-riders"
+                    className="flex items-center gap-3"
+                  >
+                    <Motorbike size={20}></Motorbike>
+                    <span>Apporve Riders</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/dashboard/users-management"
+                    className="flex items-center gap-3"
+                  >
+                    <User size={20} />
+                    <span>Users Management</span>
+                  </NavLink>
+                </li>
+              </>
+            )}
             <li>
               <button className="flex items-center gap-3">
                 <svg
