@@ -1,4 +1,5 @@
 import {
+  Bike,
   BoxIcon,
   History,
   Motorbike,
@@ -100,6 +101,15 @@ const DashBoard = () => {
                   >
                     <Motorbike size={20}></Motorbike>
                     <span>Apporve Riders</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/dashboard/assign-riders"
+                    className="flex items-center gap-3"
+                  >
+                    <Bike size={20}></Bike>
+                    <span>Assign Riders</span>
                   </NavLink>
                 </li>
                 <li>

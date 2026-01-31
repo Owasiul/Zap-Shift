@@ -10,7 +10,7 @@ const PaymentHistory = () => {
   const { data: payment = [] } = useQuery({
     queryKey: ["payment", user.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/payment-history?email=${user.email}`);1
+      const res = await axiosSecure.get(`/payment-history?email=${user.email}`);
       return res.data;
     },
   });
@@ -25,13 +25,16 @@ const PaymentHistory = () => {
             <thead className="bg-neutral-secondary-soft border-b border-default">
               <tr>
                 <th scope="col" className="px-6 py-3 font-medium">
-                 Parcel Info
+                  Parcel Info
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
-                Tracking Number
+                  Tracking Number
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
-                 Payment Info
+                  Transaction ID
+                </th>
+                <th scope="col" className="px-6 py-3 font-medium">
+                  Payment Info
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
                   Action
@@ -45,10 +48,15 @@ const PaymentHistory = () => {
                   key={pay._id}
                   className="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default"
                 >
-                 <td>{pay.parcelName}</td>
-                 <td>{pay.trackingId}</td>
-                 <td>{pay.amount} ({pay.PaymentStatus})</td>
-                 <td><button className="btn btn-sm bg-gray-50">View</button> </td>
+                  <td>{pay.parcelName}</td>
+                  <td>{pay.trackingId}</td>
+                  <td>{pay.transactionId}</td>
+                  <td>
+                    {pay.amount} ({pay.PaymentStatus})
+                  </td>
+                  <td>
+                    <button className="btn btn-sm bg-gray-50">View</button>{" "}
+                  </td>
                 </tr>
               ))}
             </tbody>

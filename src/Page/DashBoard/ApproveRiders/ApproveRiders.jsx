@@ -44,9 +44,9 @@ const ApproveRiders = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <h2 className="text-5xl text-primary">
-        Hello From Approve Riders. Need to approve {riders.length}{" "}
+        Heere are all the riders data. Need to approve {riders.length}{" "}
       </h2>
       <div className="table my-5">
         <div className="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
@@ -58,6 +58,9 @@ const ApproveRiders = () => {
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
                   Rider Name
+                </th>
+                <th scope="col" className="px-6 py-3 font-medium">
+                  Rider Email
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
                   Driving Licence
@@ -78,6 +81,9 @@ const ApproveRiders = () => {
                   Bike Model
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
+                  Woking Status
+                </th>
+                <th scope="col" className="px-6 py-3 font-medium">
                   Status
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
@@ -94,12 +100,24 @@ const ApproveRiders = () => {
                 >
                   <td className="px-6 py-4">{index + 1}</td>
                   <td className="px-6 py-4">{rider.name}</td>
+                  <td className="px-6 py-4">{rider.email}</td>
                   <td className="px-6 py-4">{rider.drivingLicence}</td>
                   <td className="px-6 py-4">{rider.nid}</td>
                   <td className="px-6 py-4">{rider.number}</td>
                   <td className="px-6 py-4">{rider.riderDistrict}</td>
                   <td className="px-6 py-4">{rider.bikeRegistration}</td>
                   <td className="px-6 py-4">{rider.bikeModel}</td>
+                  <td
+                    className={`px-6 py-4 font-semibold ${
+                      rider.workingStatus === "available"
+                        ? "text-green-500"
+                        : rider.workingStatus === "busy"
+                          ? "text-yellow-500"
+                          : "text-red-600"
+                    }`}
+                  >
+                    {rider.workingStatus}
+                  </td>
                   <td
                     className={`px-6 py-4 ${rider.status === "approved" ? "text-green-500" : "text-red-600"} font-semibold`}
                   >

@@ -68,6 +68,12 @@ const UserParcel = () => {
                   Parcel Cost
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
+                  Delivery Status
+                </th>
+                <th scope="col" className="px-6 py-3 font-medium">
+                  Tracking Id
+                </th>
+                <th scope="col" className="px-6 py-3 font-medium">
                   Payment Status
                 </th>
                 <th scope="col" className="px-6 py-3 font-medium">
@@ -92,9 +98,13 @@ const UserParcel = () => {
                   <td className="px-6 py-4">{parcel["receiver-name"]}</td>
                   <td className="px-6 py-4">{parcel.parcelWeight}</td>
                   <td className="px-6 py-4">{parcel.cost}</td>
+                  <td className="px-6 py-4">{parcel.delivery_status}</td>
+                  <td className="px-6 py-4">{parcel.trackingId}</td>
                   <td className="px-6 py-4">
                     {parcel.payment_status === "paid" ? (
-                      <span className="text-emerald-400 font-bold text-lg">Paid</span>
+                      <span className="text-emerald-400 font-bold text-lg">
+                        Paid
+                      </span>
                     ) : (
                       <Link to={`/dashboard/payment/${parcel._id}`}>
                         <button className="btn btn-sm bg-red-500 text-white">
