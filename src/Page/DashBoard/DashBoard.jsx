@@ -2,6 +2,7 @@ import {
   Bike,
   BoxIcon,
   History,
+  ListTodo,
   Motorbike,
   User,
   UserCheck2Icon,
@@ -12,6 +13,7 @@ import useRole from "../../Hooks/useRole";
 
 const DashBoard = () => {
   const { role } = useRole();
+  // console.log(role);
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -55,6 +57,7 @@ const DashBoard = () => {
         <div className="w-64 bg-base-200 min-h-screen flex flex-col">
           {/* Sidebar content */}
           <ul className="menu w-full grow p-4 gap-2">
+            {/* user only dashboard */}
             <li>
               <Link to="/" className="flex items-center gap-3 lg:mt-0 mt-14">
                 <svg
@@ -73,25 +76,44 @@ const DashBoard = () => {
                 <span>Homepage</span>
               </Link>
             </li>
+            {role === "user" && (
+              <>
+                <li>
+                  <NavLink
+                    to="/dashboard/my-parcel"
+                    className="flex items-center gap-3"
+                  >
+                    <Van size={20} />
+                    <span>My Parcels</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/dashboard/payment-history"
+                    className="flex items-center gap-3"
+                  >
+                    <History size={20} />
+                    <span>My Payment History</span>
+                  </NavLink>
+                </li>
+              </>
+            )}
 
-            <li>
-              <NavLink
-                to="/dashboard/my-parcel"
-                className="flex items-center gap-3"
-              >
-                <Van size={20} />
-                <span>My Parcels</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/dashboard/payment-history"
-                className="flex items-center gap-3"
-              >
-                <History size={20} />
-                <span>My Payment History</span>
-              </NavLink>
-            </li>
+            {role === "rider" && (
+              <>
+                <li>
+                  <NavLink
+                    to="/dashboard/assigned-delivery"
+                    className="flex items-center gap-3"
+                  >
+                    <ListTodo size={20} />
+                    <span>Assigned Deliveries</span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* admin only dashboard */}
             {role === "admin" && (
               <>
                 <li>
